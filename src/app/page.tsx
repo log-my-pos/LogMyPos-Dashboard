@@ -1,7 +1,7 @@
+import { AppMap } from "@/components/map";
+
 export default function Home() {
-    return (
-        <div>
-            
-        </div>
-    );
+  return (
+      <AppMap />
+  );
 }
