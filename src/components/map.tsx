@@ -18,11 +18,25 @@ export function AppMap() {
         zoom: 2,
       });
 
-      map.addControl(new mapboxgl.NavigationControl(), "top-left");
+      map.addControl(new mapboxgl.NavigationControl(), "top-right");
 
-      return () => map.remove();
+      let resizeTimeout: NodeJS.Timeout;
+      const resizeObserver = new ResizeObserver(() => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          map.resize();
+        }, 100);
+      });
+      
+      resizeObserver.observe(mapContainer.current);
+
+      return () => {
+        clearTimeout(resizeTimeout);
+        resizeObserver.disconnect();
+        map.remove();
+      };
     }
   }, []);
 
-  return <div style={{width: 700, height: 700}} ref={mapContainer} />;
+  return <div style={{width: 700, height: 700, resize: "both"}} ref={mapContainer} />;
 }
