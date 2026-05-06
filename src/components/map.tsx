@@ -20,23 +20,9 @@ export function AppMap() {
 
       map.addControl(new mapboxgl.NavigationControl(), "top-right");
 
-      let resizeTimeout: NodeJS.Timeout;
-      const resizeObserver = new ResizeObserver(() => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-          map.resize();
-        }, 100);
-      });
-      
-      resizeObserver.observe(mapContainer.current);
-
-      return () => {
-        clearTimeout(resizeTimeout);
-        resizeObserver.disconnect();
-        map.remove();
-      };
+      return () => map.remove();
     }
   }, []);
 
-  return <div style={{width: 700, height: 700, resize: "both"}} ref={mapContainer} />;
+  return <div style={{width: "100vw", height: "100vh"}} ref={mapContainer} />;
 }
