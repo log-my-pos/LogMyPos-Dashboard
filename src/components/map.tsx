@@ -24,5 +24,5 @@ export function AppMap() {
     }
   }, []);
 
-  return <div style={{width: "100vw", height: "100vh"}} ref={mapContainer} />;
+  return <div className="w-full h-full" ref={mapContainer} />;
 }
