@@ -1,5 +1,7 @@
 "use client";
 
+import { Card, CardHeader, CardContent  } from "@/components/ui/card";
+
 export default function LoginPage() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -8,12 +10,9 @@ export default function LoginPage() {
 
   return (
     <div className="p-4 md:p-6 w-full min-h-screen flex flex-col items-center justify-center bg-background">
-      <div className="w-full max-w-[320px] bg-white border border-sidebar-foreground p-0 shadow-sm">
-        <div className="border-b border-sidebar-foreground px-4 py-2">
-          <h2 className="text-[14px] font-semibold text-sidebar">Log In</h2>
-        </div>
-
-        <div className="p-6">
+      <Card className="max-w-[320px]">
+        <CardHeader>Log In</CardHeader>
+        <CardContent>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4.5">
             <div className="flex flex-col gap-1.5">
               <label
@@ -71,8 +70,8 @@ export default function LoginPage() {
               </button>
             </div>
           </form>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

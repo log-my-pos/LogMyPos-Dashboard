@@ -1,16 +1,12 @@
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 
 export default function ComingSoonPage() {
   return (
     <div className="p-4 md:p-6 w-full h-full min-h-[70vh] flex items-center justify-center">
-      <div className="w-full max-w-2xl bg-white border border-sidebar-foreground p-0 shadow-sm blocky-box">
-        <div className="border-b border-sidebar-foreground px-4 py-2">
-          <h2 className="text-[14px] font-semibold text-sidebar">
-            Work in Progress
-          </h2>
-        </div>
-
-        <div className="p-8 text-sm text-sidebar-foreground flex flex-col items-center justify-center text-center">
+      <Card className="max-w-2xl">
+        <CardHeader>Work in Progress</CardHeader>
+        <CardContent className="p-8 flex flex-col items-center justify-center text-center">
           <svg
             className="w-12 h-12 text-[#8c8f94] mb-4"
             fill="none"
@@ -47,8 +43,8 @@ export default function ComingSoonPage() {
           >
             Return to Dashboard
           </Link>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
