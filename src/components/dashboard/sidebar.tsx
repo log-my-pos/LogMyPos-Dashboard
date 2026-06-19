@@ -21,12 +21,7 @@ import {
   // Controls
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import {
-  IconDashboardFilled,
-  IconMap,
-  IconSettingsFilled,
-  IconUsers,
-} from "@tabler/icons-react";
+import { IconDashboardFilled, IconMap, IconUsers } from "@tabler/icons-react";
 
 type SidebarSubItem = {
   Label: string;
@@ -58,10 +53,6 @@ const menuItems: SidebarMenuItem[][] = [
           Label: "All Users",
           Link: "/users",
         },
-        {
-          Label: "User Roles",
-          Link: "/users/roles",
-        },
       ],
     },
     {
@@ -73,27 +64,10 @@ const menuItems: SidebarMenuItem[][] = [
           Label: "Location Marks",
           Link: "/location-marks",
         },
-        {
-          Label: "Map Explorer",
-          Link: "/location-marks/map-explorer",
-        },
-      ],
-    },
-  ],
-  [
-    {
-      Label: "Account",
-      Icon: <IconSettingsFilled size={20} />,
-      Link: "/account",
-      SubItems: [
-        {
-          Label: "My Profile",
-          Link: "/account",
-        },
-        {
-          Label: "Settings",
-          Link: "/account/settings",
-        },
+        // {
+        //   Label: "Map Explorer",
+        //   Link: "/location-marks/map-explorer",
+        // },
       ],
     },
   ],

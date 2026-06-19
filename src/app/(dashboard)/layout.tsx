@@ -30,9 +30,7 @@ export default async function Home({
           <TopUser />
         </Topbar>
 
-        <PageContent>
-          {children}
-        </PageContent>
+        <PageContent>{children}</PageContent>
       </SidebarInset>
     </SidebarProvider>
   );

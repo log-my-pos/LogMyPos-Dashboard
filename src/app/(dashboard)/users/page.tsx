@@ -1,50 +1,83 @@
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import Link from "next/link";
+"use client";
 
-export default function ComingSoonPage() {
+import { useEffect, useState } from "react";
+import { getCookie, type UserProfile } from "@/utils/auth";
+
+export default function UsersPage() {
+  const [users, setUsers] = useState<UserProfile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const token = getCookie("token");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch user list. Ensure you have admin permissions.");
+        }
+
+        const data = await res.json();
+        setUsers(data.data || []);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An unexpected error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   return (
-    <div className="p-4 md:p-6 w-full h-full min-h-[70vh] flex items-center justify-center">
-      <Card className="max-w-2xl">
-        <CardHeader>Work in Progress</CardHeader>
-        <CardContent className="p-8 flex flex-col items-center justify-center text-center">
-          <svg
-            className="w-12 h-12 text-[#8c8f94] mb-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-          </svg>
+    <div className="p-4 md:p-8 w-full max-w-7xl mx-auto">
+      <div className="flex items-center gap-4 mb-6">
+        <h1 className="text-2xl font-normal text-sidebar">Users</h1>
+      </div>
 
-          <h3 className="text-lg font-medium text-sidebar mb-2">
-            This page is under construction
-          </h3>
-
-          <p className="max-w-md mx-auto mb-6 text-[13px]">
-            We are actively working on bringing this feature to the dashboard.
-            Check back soon for updates!
-          </p>
-
-          <Link
-            href="/"
-            className="bg-[#2271b1] text-white px-4 py-1.5 text-sm hover:bg-[#135e96] transition-colors border border-[#2271b1] inline-block"
-          >
-            Return to Dashboard
-          </Link>
-        </CardContent>
-      </Card>
+      {loading ? (
+        <div className="text-[13px] text-neutral-500 animate-pulse">Loading users...</div>
+      ) : error ? (
+        <div className="text-[13px] text-destructive bg-destructive/10 p-3 border-l-4 border-destructive mb-4 shadow-sm">
+          {error}
+        </div>
+      ) : (
+        <div className="bg-white border border-sidebar-foreground shadow-sm">
+          <table className="w-full text-left text-[13px] border-collapse">
+            <thead>
+              <tr className="border-b border-sidebar-foreground bg-[#f6f7f7]">
+                <th className="py-2 px-4 font-semibold text-sidebar-muted">Username</th>
+                <th className="py-2 px-4 font-semibold text-sidebar-muted">Email</th>
+                <th className="py-2 px-4 font-semibold text-sidebar-muted">Role</th>
+                <th className="py-2 px-4 font-semibold text-sidebar-muted">User ID</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user, index) => (
+                <tr 
+                  key={user.id} 
+                  className={`border-b border-sidebar-foreground hover:bg-[#f6f7f7] transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-[#f9f9f9]'}`}
+                >
+                  <td className="py-3 px-4 font-bold text-[#2271b1]">{user.username}</td>
+                  <td className="py-3 px-4 text-sidebar-muted">{user.email}</td>
+                  <td className="py-3 px-4">
+                    <span className="capitalize">{user.role}</span>
+                  </td>
+                  <td className="py-3 px-4 text-[#8c8f94] font-mono text-xs">{user.id}</td>
+                </tr>
+              ))}
+              {users.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="py-4 px-4 text-center text-neutral-500">No users found.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
